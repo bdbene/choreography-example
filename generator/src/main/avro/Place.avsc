@@ -1,0 +1,11 @@
+{"namespace": "com.bdbene.generator.model",
+    "type": "record", "name": "Place",
+      "fields": [
+          {"name": "address", "type": "string"},
+          {"name": "city", "type": "string"},
+          {"name": "state",  "type": "string"},
+          {"name": "postalCode",  "type": "string"},
+          {"name": "country",  "type": "string"},
+          {"name": "phone",  "type": "string"}
+      ]
+}

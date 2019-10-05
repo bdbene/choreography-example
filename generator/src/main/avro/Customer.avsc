@@ -1,0 +1,10 @@
+{"namespace": "com.bdbene.generator.model",
+    "type": "record", "name": "Customer",
+      "fields": [
+          {"name": "customerId", "type": "string"},
+          {"name": "name", "type": "string"},
+          {"name": "email", "type": "string"},
+          {"name": "phone", "type": "string"},
+          {"name": "address", "type": "string"}
+      ]
+  }
