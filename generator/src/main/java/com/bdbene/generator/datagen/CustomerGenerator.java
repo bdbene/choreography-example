@@ -1,9 +1,11 @@
 package com.bdbene.generator.datagen;
 
-import java.util.Collection;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.Random;
+import java.util.UUID;
+import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 
@@ -22,6 +24,11 @@ import org.springframework.stereotype.Component;
 public class CustomerGenerator {
     private final String peopleDataLoc;
     private final String placesDataLoc;
+    private final int numCustomers;
+    private final Random rng;
+
+    private List<Place> cachedPlaces;
+    private List<Person> cachedPeople;
 
     @Autowired
     public CustomerGenerator(Properties customerGenProps) {
@@ -30,28 +37,48 @@ public class CustomerGenerator {
                                 "Must provide location for people data");
         this.placesDataLoc = Preconditions.checkNotNull(customerGenProps.getProperty(GeneratorConfig.PLACES_DATA_LOC),
                                 "Must provide location for places data");
+
+        this.numCustomers = Integer.parseInt(customerGenProps.getProperty(GeneratorConfig.NUM_CUSTOMERS));
+    
+        rng = new Random();
     }
 
-    public Collection<Customer> generateData() {
-        Collection<Customer> generatedData = new HashSet<>();
+    public List<Customer> generateData() {
+        List<Customer> generatedData = new ArrayList<>(numCustomers);
 
-        FileParser<Place> placeDeserializer = new FileParser<>();
-        FileParser<Person> personDeserializer = new FileParser<>();
+        getData();
 
-        List<Place> places = placeDeserializer.readData(placesDataLoc, placeDeserializer::createPlace);
-        List<Person> people = personDeserializer.readData(peopleDataLoc, personDeserializer::createPerson);
+        for (int i = 0; i < numCustomers; ++i) {
+            int peopleIndex = rng.nextInt(cachedPeople.size());
+            int placesIndex = rng.nextInt(cachedPlaces.size());
 
-        places.stream()
-            .forEach(System.out::println);
+            Person person = cachedPeople.get(peopleIndex);
+            Place place = cachedPlaces.get(placesIndex);
 
-        people.stream()
-            .forEach(System.out::println);
+            Customer customer = Customer.newBuilder()
+                .setCustomerId(UUID.randomUUID().toString())
+                .setFirstName(person.getFirstName())
+                .setLastName(person.getLastName())
+                .setEmail(person.getEmail())
+                .setPhone(place.getPhone())
+                .setAddress(place.getAddress())
+                .setCity(place.getCity())
+                .setState(place.getState())
+                .setPostalCode(place.getPostalCode())
+                .setCountry(place.getCountry())
+                .build();
+
+            generatedData.add(customer);
+        }
 
         return generatedData;
     }
 
-    @PostConstruct
-    public void init() {
-        generateData();
+    private void getData() {
+        FileParser<Place> placeDeserializer = new FileParser<>();
+        FileParser<Person> personDeserializer = new FileParser<>();
+
+        cachedPlaces = placeDeserializer.readData(placesDataLoc, placeDeserializer::createPlace);
+        cachedPeople = personDeserializer.readData(peopleDataLoc, personDeserializer::createPerson);
     }
 }

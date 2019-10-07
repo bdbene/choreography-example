@@ -1,0 +1,8 @@
+{"namespace": "com.bdbene.generator.model",
+    "type": "record", "name": "Order",
+      "fields": [
+          {"name": "orderId", "type": "string"},
+          {"name": "customerId", "type": "string"},
+          {"name": "products",  "type": {"type": "array", "items": "string"}}
+      ]
+}
