@@ -11,7 +11,10 @@ import com.bdbene.generator.model.Customer;
 import com.bdbene.generator.model.Order;
 import com.google.common.base.Preconditions;
 
-public class OrderGenerator {
+import org.springframework.stereotype.Component;
+
+@Component
+class OrderGenerator {
     private final int numOrders;
     private final Random rng;
 

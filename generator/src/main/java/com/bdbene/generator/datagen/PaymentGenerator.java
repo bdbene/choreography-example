@@ -10,7 +10,10 @@ import com.bdbene.generator.model.Order;
 import com.bdbene.generator.model.Payment;
 import com.google.common.base.Preconditions;
 
-public class PaymentGenerator {
+import org.springframework.stereotype.Component;
+
+@Component
+class PaymentGenerator {
     private final int paymentSuccess;
     private final int paymentAttempt;
 

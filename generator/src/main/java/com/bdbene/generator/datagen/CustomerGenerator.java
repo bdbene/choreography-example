@@ -5,9 +5,6 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Random;
 import java.util.UUID;
-import java.util.stream.Stream;
-
-import javax.annotation.PostConstruct;
 
 import com.bdbene.generator.config.GeneratorConfig;
 import com.bdbene.generator.datagen.serdes.FileParser;
@@ -21,7 +18,7 @@ import org.springframework.stereotype.Component;
 
 
 @Component
-public class CustomerGenerator {
+class CustomerGenerator {
     private final String peopleDataLoc;
     private final String placesDataLoc;
     private final int numCustomers;
