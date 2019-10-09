@@ -6,5 +6,12 @@ generate:
   customers: 10
   orders: 10
   payment:
-    success: 100 # Percentage of successful payments
-    attempt: 100 # Percentage of attempted payments (event actually made)
+    success: 50   # Percentage of successful payments
+    attempt: 100  # Percentage of attempted payments (event actually made)
+kafka:
+  brokers: "localhost:9092"
+  schema-registry: "localhost:8081"
+  batch: 16384
+  linger: 1
+  buffer: 33554432
+  
