@@ -36,8 +36,10 @@ public class GeneratorConfig {
     public static final String PLACES_DATA_LOC = "placesDataLoc";
     public static final String NUM_CUSTOMERS = "numCustomers";
     public static final String NUM_ORDERS = "numOrders";
+    public static final String ORDERS_TOPIC = "ordersTopic";
     public static final String PAYMENT_SUCCESS = "paymentSuccess";
     public static final String PAYMENT_ATTEMPT = "paymentAttempt";
+    public static final String PAYMENT_TOPIC = "paymentTopic";
 
     @Bean
     public Properties customerGenProps() {
@@ -65,6 +67,16 @@ public class GeneratorConfig {
 
         props.setProperty(PAYMENT_SUCCESS, paymentSuccess);
         props.setProperty(PAYMENT_ATTEMPT, paymentAttempt);
+
+        return props;
+    }
+
+    @Bean
+    public Properties orchestratorProps() {
+        Properties props = new Properties();
+
+        props.setProperty(ORDERS_TOPIC, ordersTarget);
+        props.setProperty(PAYMENT_TOPIC, paymentTarget);
 
         return props;
     }

@@ -32,15 +32,15 @@ public class DataGenOrchestrator {
                                 OrderGenerator orderGenerator, 
                                 CustomerGenerator customerGenerator,
                                 KafkaPublisher kafkaPublisher,
-                                Properties targetsProps) {
+                                Properties orchestratorProps) {
         this.paymentGenerator = Preconditions.checkNotNull(paymentGenerator, "paymentGenerator must be provided");
         this.orderGenerator = Preconditions.checkNotNull(orderGenerator, "orderGenerator must be provided");
         this.customerGenerator = Preconditions.checkNotNull(customerGenerator, "customerGenerator must be provided");
         this.kafkaPublisher = Preconditions.checkNotNull(kafkaPublisher, "kafkaPublisher must be provided");
-        Preconditions.checkNotNull(targetsProps, "targets for data must be provided");
+        Preconditions.checkNotNull(orchestratorProps, "orchestrator configs must be provided");
         
-        ordersTopic = targetsProps.getProperty(GeneratorConfig.ORDERS_TOPIC);
-        paymentTopic = targetsProps.getProperty(GeneratorConfig.PAYMENT_TOPIC);
+        ordersTopic = orchestratorProps.getProperty(GeneratorConfig.ORDERS_TOPIC);
+        paymentTopic = orchestratorProps.getProperty(GeneratorConfig.PAYMENT_TOPIC);
     }
 
     public void generateData() {
