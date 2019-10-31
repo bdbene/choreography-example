@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import com.google.common.base.Preconditions;
 
+import org.apache.avro.specific.SpecificRecord;
 import org.apache.avro.specific.SpecificRecordBase;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -31,9 +32,9 @@ public class KafkaPublisher {
         producer = new KafkaProducer<>(kafkaProps);
     }
 
-    public void writeData(List<SpecificRecordBase> data, String topic) {
+    public void writeData(List<SpecificRecord> data, String topic) {
         List<Future<RecordMetadata>> results =  data.stream()
-            .map((SpecificRecordBase message) -> new ProducerRecord<String, Object>(topic, null, message))
+            .map((SpecificRecord message) -> new ProducerRecord<String, Object>(topic, null, message))
             .map(record -> producer.send(record))
             .collect(Collectors.toList());
 
