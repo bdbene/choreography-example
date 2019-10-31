@@ -14,17 +14,23 @@ public class GeneratorConfig {
     @Value("${data.location.places}")
     private String placesDataLocation;
 
-    @Value("${generate.customers}")
+    @Value("${generate.customers.amount}")
     private String numCustomers;
 
-    @Value("${generate.orders}")
+    @Value("${generate.orders.amount}")
     private String numOrders;
+
+    @Value("${generate.orders.target}")
+    private String ordersTarget;
 
     @Value("${generate.payment.success}")
     private String paymentSuccess;
 
     @Value("${generate.payment.attempt}")
     private String paymentAttempt;
+
+    @Value("${generate.payment.target}")
+    private String paymentTarget;
 
     public static final String PEOPLE_DATA_LOC = "peopleDataLoc";
     public static final String PLACES_DATA_LOC = "placesDataLoc";

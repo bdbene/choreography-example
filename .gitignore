@@ -34,3 +34,5 @@ out/
 
 ### Avro generated ###
 model/
+
+demo/kafka*

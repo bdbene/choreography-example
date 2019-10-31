@@ -3,11 +3,15 @@ data:
     places: src/main/resources/places.txt
     people: src/main/resources/people.txt
 generate:
-  customers: 10
-  orders: 10
+  customers:
+    amount: 10
+  orders: 
+    amount: 10
+    target: orders
   payment:
     success: 50   # Percentage of successful payments
     attempt: 100  # Percentage of attempted payments (event actually made)
+    target: payments
 kafka:
   brokers: "localhost:9092"
   schema-registry: "localhost:8081"
