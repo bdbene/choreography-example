@@ -3,6 +3,8 @@ data:
     places: src/main/resources/places.txt
     people: src/main/resources/people.txt
 generate:
+  orchestrate:
+    rate: 500       # Rate (millis) to produce data
   customers:
     amount: 10
   orders: 

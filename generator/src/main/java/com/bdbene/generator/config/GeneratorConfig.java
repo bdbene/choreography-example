@@ -32,6 +32,9 @@ public class GeneratorConfig {
     @Value("${generate.payment.target}")
     private String paymentTarget;
 
+    @Value("${generate.orchestrate.rate}")
+    private String orchestrationRate;
+
     public static final String PEOPLE_DATA_LOC = "peopleDataLoc";
     public static final String PLACES_DATA_LOC = "placesDataLoc";
     public static final String NUM_CUSTOMERS = "numCustomers";
@@ -40,6 +43,7 @@ public class GeneratorConfig {
     public static final String PAYMENT_SUCCESS = "paymentSuccess";
     public static final String PAYMENT_ATTEMPT = "paymentAttempt";
     public static final String PAYMENT_TOPIC = "paymentTopic";
+    public static final String ORCHESTRATION_RATE = "orchestrationRate";
 
     @Bean
     public Properties customerGenProps() {
@@ -77,6 +81,7 @@ public class GeneratorConfig {
 
         props.setProperty(ORDERS_TOPIC, ordersTarget);
         props.setProperty(PAYMENT_TOPIC, paymentTarget);
+        props.setProperty(ORCHESTRATION_RATE, orchestrationRate);
 
         return props;
     }

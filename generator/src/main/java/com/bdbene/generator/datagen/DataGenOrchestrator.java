@@ -17,8 +17,12 @@ import com.google.common.base.Preconditions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Component
+@Slf4j
 public class DataGenOrchestrator {
+    private final long rate;
     private final PaymentGenerator paymentGenerator;
     private final OrderGenerator orderGenerator;
     private final CustomerGenerator customerGenerator;
@@ -26,6 +30,10 @@ public class DataGenOrchestrator {
 
     private final String ordersTopic;
     private final String paymentTopic;
+
+    private List<byte[]> customers;
+    private List<byte[]> orders;
+    private List<byte[]> payments;
     
     @Autowired
     public DataGenOrchestrator(PaymentGenerator paymentGenerator, 
@@ -41,27 +49,45 @@ public class DataGenOrchestrator {
         
         ordersTopic = orchestratorProps.getProperty(GeneratorConfig.ORDERS_TOPIC);
         paymentTopic = orchestratorProps.getProperty(GeneratorConfig.PAYMENT_TOPIC);
+        rate = Long.parseLong(orchestratorProps.getProperty(GeneratorConfig.ORCHESTRATION_RATE));
     }
 
-    public void generateData() {
-        List<Customer> customers = customerGenerator.generateData();
-        List<Order> orders = orderGenerator.generateData(customers);
-        List<Payment> payments = paymentGenerator.generateData(orders);
+    private void generateData() {
+        List<Customer> customersObjs = customerGenerator.generateData();
+        List<Order> ordersObjs = orderGenerator.generateData(customersObjs);
+        List<Payment> paymentsObjs = paymentGenerator.generateData(ordersObjs);
 
-        List<byte[]> serializedOrders = orders.stream()
+        orders = ordersObjs.stream()
             .map(AvroSerializer::serialize)
             .collect(Collectors.toList());
 
-        List<byte[]> serializedPayments = payments.stream()
+        payments = paymentsObjs.stream()
             .map(AvroSerializer::serialize)
             .collect(Collectors.toList());
-            
-        kafkaPublisher.writeData(serializedOrders, ordersTopic);
-        kafkaPublisher.writeData(serializedPayments, paymentTopic);
+    }
+
+    private void writeToKafka(List<byte[]> message, String topic) {
+        kafkaPublisher.writeData(message, topic);
+    }
+
+    private void run() {
+        while (true) {
+            generateData();
+
+            writeToKafka(orders, ordersTopic);
+            writeToKafka(payments, paymentTopic);
+
+            try {
+                Thread.sleep(rate);
+            } catch (InterruptedException e) {
+                log.error("InteruptedException - Shutting down.", e);
+                Thread.currentThread().interrupt();
+            }
+        }
     }
 
     @PostConstruct
     void init() {
-        generateData();
+        run();
     }
 }
