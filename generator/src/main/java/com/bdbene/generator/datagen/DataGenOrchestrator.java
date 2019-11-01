@@ -30,6 +30,7 @@ public class DataGenOrchestrator {
 
     private final String ordersTopic;
     private final String paymentTopic;
+    private final String customerTopic;
 
     private List<byte[]> customers;
     private List<byte[]> orders;
@@ -49,6 +50,7 @@ public class DataGenOrchestrator {
         
         ordersTopic = orchestratorProps.getProperty(GeneratorConfig.ORDERS_TOPIC);
         paymentTopic = orchestratorProps.getProperty(GeneratorConfig.PAYMENT_TOPIC);
+        customerTopic = orchestratorProps.getProperty(GeneratorConfig.CUSTOMER_TOPIC);
         rate = Long.parseLong(orchestratorProps.getProperty(GeneratorConfig.ORCHESTRATION_RATE));
     }
 
@@ -64,6 +66,10 @@ public class DataGenOrchestrator {
         payments = paymentsObjs.stream()
             .map(AvroSerializer::serialize)
             .collect(Collectors.toList());
+
+        customers = customersObjs.stream()
+            .map(AvroSerializer::serialize)
+            .collect(Collectors.toList());
     }
 
     private void writeToKafka(List<byte[]> message, String topic) {
@@ -76,6 +82,7 @@ public class DataGenOrchestrator {
 
             writeToKafka(orders, ordersTopic);
             writeToKafka(payments, paymentTopic);
+            writeToKafka(customers, customerTopic);
 
             try {
                 Thread.sleep(rate);
