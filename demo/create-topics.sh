@@ -9,3 +9,4 @@ function create_topic() {
 
 create_topic orders
 create_topic payments
+create_topic customers

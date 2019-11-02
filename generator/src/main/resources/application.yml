@@ -7,6 +7,7 @@ generate:
     rate: 500       # Rate (millis) to produce data
   customers:
     amount: 10
+    target: customers
   orders: 
     amount: 10
     target: orders
